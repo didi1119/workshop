@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【Design Your Calm】內部體驗執行手冊 (SOP完整版)</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap');
+
+        :root {
+            color-scheme: light;
+            --bg-base: #f5f5f7;
+            --bg-elevated: rgba(255, 255, 255, 0.92);
+            --bg-translucent: rgba(255, 255, 255, 0.72);
+            --border-soft: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.12);
+            --shadow-soft: 0 30px 60px -40px rgba(15, 23, 42, 0.28);
+            --shadow-subtle: 0 24px 40px -32px rgba(15, 23, 42, 0.18);
+            --text-strong: #1d1d1f;
+            --text-medium: rgba(29, 29, 31, 0.72);
+            --text-soft: rgba(29, 29, 31, 0.56);
+            --accent: #0a84ff;
+            --accent-soft: rgba(10, 132, 255, 0.12);
+            --accent-border: rgba(10, 132, 255, 0.24);
+            --amber-soft: rgba(255, 214, 0, 0.14);
+            --amber-border: rgba(255, 214, 0, 0.28);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'SF Pro Display', 'SF Pro Text', '-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'Helvetica', 'Arial', 'Noto Sans TC', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-strong);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--accent);
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+            color: var(--text-medium);
+        }
+
+        ul {
+            margin: 0.75rem 0 1.25rem;
+            padding-left: 1.35rem;
+        }
+
+        li {
+            margin-bottom: 0.45rem;
+        }
+
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 3.2rem 1.75rem 4rem;
+        }
+
+        .manual-hero {
+            position: relative;
+            padding: 3rem;
+            border-radius: 32px;
+            background: var(--bg-elevated);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(28px);
+        }
+
+        .manual-hero h1 {
+            font-size: clamp(2.4rem, 4vw, 3.4rem);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin: 0 0 0.8rem;
+        }
+
+        .manual-hero h2 {
+            font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+            font-weight: 400;
+            color: var(--text-soft);
+            margin: 0 0 2.2rem;
+        }
+
+        .manual-hero p {
+            border-radius: 24px;
+            padding: 1.6rem;
+            background: rgba(255, 255, 255, 0.65);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            color: var(--text-medium);
+        }
+
+        .manual-hero p span {
+            color: var(--text-strong);
+        }
+
+        .manual-tabs {
+            position: sticky;
+            top: 1.2rem;
+            z-index: 20;
+            margin: 3rem 0 2.5rem;
+            padding: 0.6rem;
+            background: var(--bg-translucent);
+            backdrop-filter: blur(18px);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .manual-tabs .tab-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 0.6rem;
+        }
+
+        .tab-button {
+            border: 1px solid transparent;
+            border-radius: 14px;
+            padding: 0.85rem 1rem;
+            background: transparent;
+            color: var(--text-soft);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .tab-button:hover {
+            color: var(--text-strong);
+            border-color: rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.55);
+        }
+
+        .tab-button.active {
+            color: var(--accent);
+            background: #ffffff;
+            border-color: var(--accent-border);
+            box-shadow: 0 16px 30px -24px rgba(10, 132, 255, 0.46);
+        }
+
+        .tab-button:focus-visible {
+            outline: 2px solid rgba(10, 132, 255, 0.6);
+            outline-offset: 3px;
+        }
+
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fade-in 0.45s ease forwards;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-title {
+            position: relative;
+            margin: 2.4rem 0 1.8rem;
+            padding-left: 1.4rem;
+            font-size: clamp(1.7rem, 2.2vw, 2rem);
+            font-weight: 600;
+            letter-spacing: -0.005em;
+        }
+
+        .content-title::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 6px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(10, 132, 255, 0.7), rgba(10, 132, 255, 0.3));
+        }
+
+        .sop-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #ffffff;
+            border-radius: 26px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-subtle);
+            margin-bottom: 2.8rem;
+        }
+
+        .sop-table th,
+        .sop-table td {
+            padding: 1.45rem 1.6rem;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            border-right: 1px solid rgba(0, 0, 0, 0.04);
+            line-height: 1.75;
+        }
+
+        .sop-table th:last-child,
+        .sop-table td:last-child {
+            border-right: none;
+        }
+
+        .sop-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sop-table th {
+            background: rgba(0, 0, 0, 0.02);
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-soft);
+            font-weight: 600;
+        }
+
+        .sop-table tr:first-child th {
+            background: linear-gradient(120deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.55));
+            color: #ffffff;
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+            text-transform: none;
+        }
+
+        .sop-table strong {
+            color: var(--text-strong);
+            font-weight: 600;
+        }
+
+        .sop-table ul {
+            list-style: disc;
+            padding-left: 1.2rem;
+            color: var(--text-medium);
+        }
+
+        .sop-table li::marker {
+            color: var(--accent);
+        }
+
+        .script-text {
+            display: block;
+            background: rgba(10, 132, 255, 0.08);
+            border: 1px solid rgba(10, 132, 255, 0.2);
+            border-left: 5px solid var(--accent);
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            margin-top: 1.1rem;
+            color: var(--text-strong);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .script-text strong {
+            display: block;
+            margin-bottom: 0.45rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .peak-box {
+            margin-top: 1.15rem;
+            padding: 1.1rem 1.25rem;
+            border-radius: 18px;
+            background: var(--amber-soft);
+            border: 1px solid var(--amber-border);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            color: var(--text-medium);
+        }
+
+        .peak-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #b36100;
+            margin-bottom: 0.6rem;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 1.3rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            border-right: 1px solid rgba(0, 0, 0, 0.04);
+            color: var(--text-medium);
+        }
+
+        .summary-table th {
+            background: rgba(0, 0, 0, 0.02);
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-soft);
+        }
+
+        .summary-table th:last-child,
+        .summary-table td:last-child {
+            border-right: none;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .summary-table .how-text {
+            font-weight: 600;
+            color: var(--text-strong);
+        }
+
+        .grid-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 22px;
+            padding: 1.8rem;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .grid-card h4 {
+            margin-top: 0;
+            margin-bottom: 0.85rem;
+            color: var(--text-strong);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .grid-card p {
+            margin: 0;
+            color: var(--text-medium);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 2.6rem 1.4rem 3rem;
+            }
+
+            .manual-hero {
+                padding: 2.5rem;
+            }
+
+            .tab-button {
+                font-size: 0.92rem;
+            }
+
+            .sop-table,
+            .summary-table {
+                font-size: 0.96rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .manual-hero {
+                padding: 2.1rem;
+                border-radius: 24px;
+            }
+
+            .manual-tabs {
+                padding: 0.5rem;
+                overflow-x: auto;
+            }
+
+            .manual-tabs .tab-list {
+                display: flex;
+                gap: 0.5rem;
+                min-width: 540px;
+            }
+
+            .tab-button {
+                white-space: nowrap;
+            }
+
+            .sop-table,
+            .summary-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .sop-table th,
+            .sop-table td,
+            .summary-table th,
+            .summary-table td {
+                min-width: 240px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 主容器 -->
+    <div class="container">
+
+        <!-- 頁首 -->
+        <header class="manual-hero mb-10">
+            <h1>【Design Your Calm】</h1>
+            <h2>內部體驗執行手冊 (SOP 完整版)</h2>
+            <p>
+                <span class="font-bold">核心理念：</span> “在森林中，重新感覺生活。”<br>
+                <span class="font-bold">執行準則：</span> 本手冊是體驗的靈魂。請精準執行「物料準備」，並用心「感受」引導詞腳本，用您最真實、溫暖的聲音傳達出去。
+            </p>
+        </header>
+
+        <!-- Tab 導覽列 -->
+        <nav class="manual-tabs" role="tablist" aria-label="體驗日程">
+            <div class="tab-list">
+                <button id="tab-day1" class="tab-button active" type="button" role="tab" aria-controls="day1" aria-selected="true" data-tab="day1">
+                    Day 1: 解構
+                </button>
+                <button id="tab-day2" class="tab-button" type="button" role="tab" aria-controls="day2" aria-selected="false" data-tab="day2">
+                    Day 2: 沉浸
+                </button>
+                <button id="tab-day3" class="tab-button" type="button" role="tab" aria-controls="day3" aria-selected="false" data-tab="day3">
+                    Day 3: 整合
+                </button>
+                <button id="tab-summary" class="tab-button" type="button" role="tab" aria-controls="summary" aria-selected="false" data-tab="summary">
+                    核心總覽
+                </button>
+            </div>
+        </nav>
+
+        <!-- Tab 內容 -->
+        <main>
+
+            <!-- ============================== -->
+            <!-- Day 1: 解構 -->
+            <!-- ============================== -->
+            <div id="day1" class="tab-content active" role="tabpanel" aria-labelledby="tab-day1">
+                <h2 class="content-title">Day 1:【解構 Release】— 溫柔地瓦解日常的盔甲</h2>
+
+                <!-- 活動 1.1 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">14:00 - 15:00 | 活動 1.1: 抵達 & 靜謐迎賓</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 創造絕對的心理安全感，讓賓客從「城市頻率」校準到「森林頻率」。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            從「疏離、不安」
+                            <br>→ 到「被溫柔接住、被寵愛」
+                            <br>→ 到「好奇心被喚醒」。
+                        </td>
+                        <td>
+                            <strong>場景 (接待區)：</strong>
+                            <ul>
+                                <li>播放清單：[指定輕柔音樂，如 Brian Eno]。音量極低。</li>
+                                <li>香氣：[指定木質調擴香]，如檜木或雪松。</li>
+                                <li>光線：柔和的間接照明，避免刺眼。</li>
+                            </ul>
+                            <strong>物料 (每人份)：</strong>
+                            <ul>
+                                <li>迎賓茶 (已備妥，溫熱)：在地馬鞭草＋鳳梨鼠尾草茶。</li>
+                                <li>[品牌] 天然防蚊液 (瓶身設計需有質感)。</li>
+                                <li>精緻小木盒 (附鑰匙)。</li>
+                                <li>小紙條 (質感厚磅紙) &amp; 筆。</li>
+                                <li>木棧道前的軟墊或地毯 (供脫鞋)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 接待與香氛] (引導員A)</strong>
+                            <p>賓客抵達時，引導員A微笑上前，第一時間送上「森林香水」(防蚊液)，而非房卡。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「您好，歡迎來到靜謐森林。在我們開始之前，邀請您先為自己噴上這瓶『森林的香水』。它是在地香茅與檸檬草調製的，氣味很溫和，它會溫柔地告知這裡的蚊蟲芳鄰：『我們是來拜訪的朋友』。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (蚊蟲)</span>
+                                將「蚊蟲」這個最大干擾源，在第一刻轉化為「被寵愛的儀式感」。賓客的焦慮立刻下降，並建立「這裡很貼心」的第一印象。
+                            </div>
+
+                            <strong>[Step 2: 迎賓茶 &amp; 脫鞋儀式] (引導員B)</strong>
+                            <p>引導至接待桌，引導員B 雙手奉上溫熱的迎賓茶。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「這是我們為您準備的『落地茶』。它能幫助我們把飛揚的心，安穩地帶回這片土地。請您先享用。」
+                                <br><br>
+                                (待賓客喝完茶) 「在您入住前，我們有個小小的儀式。請跟我來... 邀請您在這裡脫下鞋，赤腳踩上這片土地30秒。不用做什麼，只是單純地感覺它。」
+                            </span>
+
+                            <strong>[Step 3: 煩惱收藏盒 (封存儀式)]</strong>
+                            <p>在辦理入住時，同時交付木盒、紙筆。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「我們知道，您可能帶著整個世界來到這裡。這個小盒子是您的『心事管家』。晚點在房內，邀請您將腦中最掛念的一件事寫下，鎖進去。這三天，它將由我們為您保管。請相信，當您準備好時，您會有新的眼光去打開它。」
+                            </span>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                將「放下」這個抽象概念，變成「鎖上盒子」的具體動作。這個儀式能極大地強化「清空」的心理暗示，為後續體驗鋪路。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 1.2 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">15:30 - 17:00 | 活動 1.2: 森林緩步覺察</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 打破「觀光」慣性，引導賓客從「用腦思考」切換到「用身體感覺」。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            從「期待看到什麼」
+                            <br>→ 到「專注於當下」
+                            <br>→ 到「對微小事物感到驚奇」。
+                        </td>
+                        <td>
+                            <strong>場景 (森林小徑)：</strong>
+                            <ul>
+                                <li>確認路徑安全、無干擾。</li>
+                                <li>預先選定3個「感官停留點」（例如：光影好的地方、有獨特樹皮的地方、風聲明顯的地方）。</li>
+                            </ul>
+                            <strong>物料 (每人份)：</strong>
+                            <ul>
+                                <li>無 (此活動強調「無工具」的體驗)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 重新定義 (破題)]</strong>
+                            <p>在小徑入口處集合，引導員的開場白至關重要。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「接下來的90分鐘，我們不去任何『景點』。因為我們的森林不大，所以我們有最奢侈的機會，可以看得非常、非常深。我們唯一的目的地，就是『當下』。我們將重新學習走路，不是用腦，而是用您的腳掌。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (場域小)</span>
+                                立即將「小」的劣勢，重新定義為「深」的優勢。直接打破賓客「怎麼沒帶我們去走走」的預期，建立「微觀洞察」的心理預期。
+                            </div>
+
+                            <strong>[Step 2: 慢走練習]</strong>
+                            <p>引導員親身示範極度緩慢的行走，分解動作。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「現在，請試著用『十分之一』的速度行走。感覺您的腳跟落下，腳掌貼地，最後是腳趾... 感覺土地的回饋。我們不趕時間，每一步都是一個完整的體驗。」
+                            </span>
+
+                            <strong>[Step 3: 感官停留點]</strong>
+                            <p>在預選的3個停留點，給予清晰的感官指令。</p>
+                            <span class="script-text">
+                                <strong>(點1 - 聽覺)：</strong>「請停下，閉上眼睛。讓我們把耳朵打開... 您能聽到幾種聲音？哪種最遠？哪種最近？」
+                                <br>
+                                <strong>(點2 - 觸覺)：</strong>「請找一片您面前的葉子或樹皮。用您的指尖，去描摹它的輪廓與紋理。感覺它的溫度。」
+                                <br>
+                                <strong>(點3 - 視覺)：</strong>「請在您面前一公尺的範圍內，試著找出五種不同的『綠色』。」
+                            </span>
+
+                            <strong>[Step 4: 靜默練習]</strong>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「接下來的20分鐘，是我們送給自己，也送給森林的禮物。我們將不再交談，讓我們把語言的能力，暫時還給鳥鳴與風聲。」
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 1.3 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">17:00 - 18:30 | 活動 1.3: 森林香氣工作坊</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 透過嗅覺，建立與這片土地的深層連結，並創造一個可帶走的「體驗信物」。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            從「被動接收」
+                            <br>→ 到「主動創造」
+                            <br>→ 到「內在探索」與「平靜」。
+                        </td>
+                        <td>
+                            <strong>場景 (室內或半戶外)：</strong>
+                            <ul>
+                                <li>長桌、舒適的椅子。</li>
+                                <li>播放清單：[指定沉靜音樂]。</li>
+                                <li>每人一份的調香工具。</li>
+                            </ul>
+                            <strong>物料 (每人份)：</strong>
+                            <ul>
+                                <li>5ml 茶色精油瓶 (附滴管)。</li>
+                                <li>基底油 (如荷荷芭油)。</li>
+                                <li>3-4 款精油 (例如：雪松、甜橙、薰衣草、以及在地特色的野薑花)。</li>
+                                <li>試香紙、燒杯、玻璃攪拌棒。</li>
+                                <li>客製化小標籤 &amp; 筆。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 嗅覺與故事]</strong>
+                            <p>引導員介紹桌上精油，重點在「故事」而非「功效」。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「這瓶雪松，來自高山，它聞起來像一座安穩的靠山。這瓶甜橙，像灑落的陽光。而這瓶野薑花，就來自我們園區的溪邊，它代表著此時此地的生命力與喜悅。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (海拔低)</span>
+                                將低海拔常見的「野薑花」，透過故事轉譯，賦予其獨特意義，使其成為賓客與「這片土地」連結的專屬氣味。
+                            </div>
+
+                            <strong>[Step 2: 心境檢測 (提問)]</strong>
+                            <p>這是活動的靈魂。提問方式決定了體驗的深度。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「在調香前，請先聞一聞這幾款香氣。不要去想你『喜不喜歡』，而是去感覺...<br>
+                                1. 哪一款最像你『來到這裡之前』的狀態？<br>
+                                2. 哪一款最像你『現在』的感受？<br>
+                                3. 哪一款是你『渴望帶走』的品質？<br>
+                                您的香氛，將以『現在的感受』和『渴望的品質』為主。」
+                            </span>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                這個提問，將「調香」從一個DIY活動，昇華為一場深刻的「內在探索」。賓客創造的不是香水，而是自己內在狀態的映照。
+                            </div>
+
+                            <strong>[Step 3: 命名與靜坐]</strong>
+                            <p>調配完成後，請大家為香氛命名，並貼上標籤。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「請為您的香氛命名，例如『夏夜晚風』或『安靜的心』。這個名字是您送給此刻自己的祝福。<br>
+                                ...現在，請將香氣滴一滴在手腕，輕輕搓揉。閉上眼，用三次深呼吸，將這個專屬於您的香氣，吸入身體的每一個細胞。記住這個味道，也記住此刻的安寧。」
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 1.4 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">18:30 - 20:00 | 活動 1.4: 森林餐桌晚宴</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 透過食物滋養身心，並在溫暖的氛圍中，自然地促進成員間的連結。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            從「安頓」
+                            <br>→ 到「溫暖、放鬆」
+                            <br>→ 到「社群連結感」。
+                        </td>
+                        <td>
+                            <strong>場景 (餐廳)：</strong>
+                            <ul>
+                                <li>光線：燭光與暖色系燈光為主。</li>
+                                <li>音樂：[指定舒緩、愉悅的爵士或輕音樂]。</li>
+                                <li>餐桌佈置：漂流木、苔蘚、當季花草等自然元素。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>無菜單料理 (已備妥)。</li>
+                                <li>印製精美的「敘事性菜單」。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 慢嚐覺察引導]</strong>
+                            <p>在第一道菜上桌時，引導員花1分鐘，校準整個晚餐的節奏。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「在我們開動前，邀請大家進行一個小練習。請您花10秒鐘，純粹地『看』著您的食物... 感受它的色彩和樣子... 現在，請吃下第一口，試著用30秒的時間，慢慢地咀嚼，感受它在口中質地與味道的奇妙變化。」
+                            </span>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                這個小練習，能瞬間將賓客從「社交應酬」的慣性中拉回，進入「正念品嚐」的模式，極大提升對食物的感知力。
+                            </div>
+
+                            <strong>[Step 2: 菜單的敘事]</strong>
+                            <p>每上一道菜，服務人員或引導員都需介紹它的「身世」。</p>
+                            <span class="script-text">
+                                <strong>引導詞 (範例)：</strong>「這道南瓜湯，用的是我們山腳下王伯伯種的有機南瓜，經過了4小時的慢火烘烤。我們希望您能嚐到陽光與土地的味道。」
+                            </span>
+
+                            <strong>[Step 3: 促進連結]</strong>
+                            <p>部分菜餚可設計為 Family Style (共享制)，自然地促進同桌成員的互動（「麻煩幫我遞一下...」）。</p>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 1.5 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">20:30 - 21:30 | 活動 1.5: 【本日高潮】森林無光之徑 &amp; 迴聲書信</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 剝奪視覺，放大其他感官，創造深刻的內在對話。並透過匿名的集體共振，達成深層療癒。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「信任、輕微緊張」
+                            <br>→ 「感官放大、內心澄澈」
+                            <br>→ 「被觸動、集體療癒」。
+                        </td>
+                        <td>
+                            <strong>場景 (戶外)：</strong>
+                            <ul>
+                                <li>路徑：預先確認安全，無障礙物。</li>
+                                <li>終點：佈置一個由燭光 (或 LED 燭光) 環繞的「神聖空間」，鋪設坐墊。</li>
+                                <li>光線：全程除引導員的手電筒(照地)外，無其他人造光源。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>高品質眼罩 (每人一副，確保完全不透光)。</li>
+                                <li>硬質卡片 (明信片大小) &amp; 筆 (每人一份)。</li>
+                                <li>收集卡片的布袋或木盒。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 無光之徑]</strong>
+                            <p>在室內發放眼罩，引導員的聲音必須極度穩定、溫柔。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「接下來，我們將暫時關掉最習慣的視覺。請全然地信任您的腳步，信任我的聲音。您可能會聽到許多聲音，那是森林的呼吸。我們一起，走進真正的寧靜裡。請戴上眼罩。」
+                            </span>
+                            <p>引導員以「人鍊」(搭肩或牽繩) 方式，用極緩慢的速度前行。</p>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (夜晚/蟲鳴)</span>
+                                剝奪視覺後，聽覺會無限放大。原本惱人的「蟲鳴」，此刻會變成震撼的「8D 環繞音效」。場域的「私密性」確保了過程不被外界車聲、人聲打擾。
+                            </div>
+
+                            <strong>[Step 2: 進入神聖空間]</strong>
+                            <p>抵達燭光圈後，引導大家坐下，再請大家摘下眼罩。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「好的，我們到了。請慢慢地、溫柔地摘下您的眼罩。」
+                            </span>
+                            <p><strong>(體驗高潮：從極致的黑暗到看見溫暖燭光圈，會產生強烈的視覺與心理衝擊。)</strong></p>
+
+                            <strong>[Step 3: 迴聲書信 (提問)]</strong>
+                            <p>發放卡片和筆。引導員的提問是儀式的靈魂。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「在剛剛的黑暗中，您的心變得非常澄澈。現在，我想邀請您寫下一句話... <strong>如果，這片黑暗有智慧，它想對此刻的你，說一句最溫柔的話，那會是什麼？</strong> ... 請寫下它，不用署名。」
+                            </span>
+
+                            <strong>[Step 4: 迴聲的匿名性]</strong>
+                            <p>引導員收集所有卡片，然後用極輕柔、中性的聲音，隨機念出。</p>
+                            <span class="script-text">
+                                <strong>引導詞 (念誦時)：</strong>「(念出卡片內容)...」、 「(念出下一張)...」 (中間不加任何評論)
+                            </span>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                A 寫下的話，可能深深觸動 B；B 的感悟，也許正是 C 需要的答案。這是一種深刻、安全、匿名的集體療M。第一天的情緒在此達到最高點。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <!-- ============================== -->
+            <!-- Day 2: 沉浸 -->
+            <!-- ============================== -->
+            <div id="day2" class="tab-content" role="tabpanel" aria-labelledby="tab-day2" hidden>
+                <h2 class="content-title">Day 2:【沉浸 Receive】— 讓森林的智慧，流淌進來</h2>
+
+                <!-- 活動 2.1 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">06:30 - 07:30 | 活動 2.1: 晨光瑜伽 &amp; 呼吸儀式</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 溫柔地喚醒身體能量，並透過呼吸，與清晨的自然頻率同頻。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            從「睡眼惺忪」
+                            <br>→ 到「身體甦醒」
+                            <br>→ 到「輕盈、平靜」。
+                        </td>
+                        <td>
+                            <strong>場景 (戶外平台或草地)：</strong>
+                            <ul>
+                                <li><strong>環境先行：</strong> 賓客抵達前15分鐘，必須完成佈置。</li>
+                                <li>香氣：點上天然木質香氛 (如聖木、檜木)。</li>
+                                <li>音樂：播放極輕柔的自然環境音 (若鳥鳴聲足夠則免)。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>瑜伽墊 (每人一份，鋪設整齊)。</li>
+                                <li>溫熱毛巾 (浸泡過精油熱水，用保溫箱保存)。</li>
+                                <li>薄毯 (備用)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 重新命名 &amp; 晨光祝詞]</strong>
+                            <p>引導員以溫和的聲音開始。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「早安。歡迎來到我們的『晨霧吐納』。低海拔的清晨，空氣中充滿了豐沛的濕氣，這是最好的天然加濕器。在開始前，讓我們一起... (念誦一小段晨光祝詞，例如：感謝森林讓我們在寧靜中醒來...)」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (濕氣)</span>
+                                將「濕氣」這個潛在的身體不適，轉化為可以被「吸入」的療癒能量，加深身心與環境的連結。
+                            </div>
+
+                            <strong>[Step 2: 呼吸與協奏]</strong>
+                            <p>引導溫和的伸展，重點在呼吸，非難度。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「現在，讓我們跟隨森林的節奏來呼吸。吸氣時，聽見鳥鳴；吐氣時，感覺身體的重量回到大地。讓我們的呼吸，成為這場晨間音樂會的一部分。」
+                            </span>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (鳥鳴)</span>
+                                將無法控制的「鳥鳴」從「干擾」重新定義為「協奏」，讓賓客感覺自己是「在森林的懷抱中一起呼吸」。
+                            </div>
+
+                            <strong>[Step 3: 溫熱毛巾的魔法 (大休息)]</strong>
+                            <p>在大休息時，引導員輕輕為每位賓客的眼部蓋上溫熱毛巾。</p>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 頂級體驗細節</span>
+                                這是創造頂級體驗的關鍵。眼部的溫熱與香氣，會帶來極致的放鬆與「被照顧感」，是品牌質感的體現。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 2.2 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">08:00 - 09:00 | 活動 2.2: 森林早餐 &amp; 靜心卡</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 將「吃早餐」這個日常動作，轉變為一個充滿覺察與啟發的微型儀式。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「平靜」
+                            <br>→ 到「被啟發」
+                            <br>→ 到「自然的交流」。
+                        </td>
+                        <td>
+                            <strong>場景 (餐廳)：</strong>
+                            <ul>
+                                <li>音樂：輕快的晨間音樂。</li>
+                                <li>光線：明亮的自然光。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>[品牌] 靜心卡 (一套)。</li>
+                                <li>精緻的布包或木盒 (用來裝卡片)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 抽卡儀式]</strong>
+                            <p>賓客入座時，引導員會持布包/木盒上前。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「在您用早餐前，邀請您為自己抽出『今天宇宙想給您的訊息』。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                「抽卡」的儀式性動作，會讓卡片上的文字變得更有份量，彷彿是專屬於他/她的指引。
+                            </div>
+
+                            <strong>[Step 2: 邀請分享 (非強迫)]</strong>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「如果您的卡片讓您很有感觸，我們歡迎您在用餐時，和鄰座的朋友分享它。」
+                            </span>
+                            <p><strong>(目的：創造自然、有深度的交流機會。)</strong></p>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 2.3 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">09:30 - 12:00 | 活動 2.3: 森林創造體驗：「意識手作」</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 體驗無目的、無評判的「心流」狀態。將內在感受，透過雙手轉化為外在的表達。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「創作焦慮」
+                            <br>→ 到「專注、心流」
+                            <br>→ 到「表達的喜悅」。
+                        </td>
+                        <td>
+                            <strong>場景 (戶外或半戶外)：</strong>
+                            <ul>
+                                <li>音樂：[指定無人聲、流動感強的音樂]，如 Ambient, Handpan。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>素材：賓客可自行撿拾，或預先準備 (落葉、樹枝、苔蘚、果實)。</li>
+                                <li>工具：底板 (如木片或紙板)、麻繩、熱熔槍 (由工作人員操作)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 「不完美」的宣言 (破除焦慮)]</strong>
+                            <p>引導員拿起一片破碎的葉子開始。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「在這片森林裡，沒有完美的圓形或直線。我們今天的創作，也不是要追求完美，而是要去發現和欣賞這些『不完美』中的獨特之美。這就是『侘寂』。這裡沒有『好』或『壞』的作品，只有『真實』的作品。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (素材樸素)</span>
+                                將素材的「樸素」，昇華為一次「侘寂」哲學與美學的體驗。徹底解放賓客的「評價焦慮」，讓他們可以安心地「玩」。
+                            </div>
+
+                            <strong>[Step 2: 設定抽象主題]</strong>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「我們的主題是：『我的內在天氣』。如果『此刻你的心』是一個自然景觀，它會是什麼樣子？可能是平靜的湖面、混亂的枝枒... 請用雙手把它呈現出來。」
+                            </span>
+
+                            <strong>[Step 3: 分享的引導 (聚焦感受)]</strong>
+                            <p>分享時，引導員的提問是關鍵。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「(不要問：你做了什麼？) <br>
+                                <strong>請問：</strong>『在創作的過程中，你有什麼感覺？』或『這個作品的哪個部分，讓你覺得最像現在的你？』」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                將分享的焦點從「結果 (作品)」拉回到「過程 (感受)」。讓手作從美術課，變成深刻的「非語言自我對話工具」。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 2.4 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">12:00 - 13:00 | 活動 2.4: 午餐「靜默餐」</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 在上午的表達之後，提供一個安靜的內收空間。讓感官在靜默中變得更敏銳。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「安靜、內收、覺察」。
+                        </td>
+                        <td>
+                            <strong>場景 (餐廳)：</strong>
+                            <ul>
+                                <li>音樂：[僅播放純粹的自然聲] 或 [完全無音樂]。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>銅鈴或頌缽 (1個)。</li>
+                                <li>餐桌小卡 (每人一份)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 儀式化的開始]</strong>
+                            <p>引導員在餐前說明，並敲響銅鈴。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「我們的午餐將是一頓『靜默餐』。一言不發，是為了更深刻地聆聽。讓我們把耳朵也打開，品嚐食物，也品嚐寧靜。靜默，現在開始。」 (敲響銅鈴)
+                            </span>
+
+                            <strong>[Step 2: 餐桌小卡]</strong>
+                            <p>卡片文字：<span class="script-text">「一食一飯，皆是自然的贈予。一言不發，是為了更深刻地聆聽。感謝食物，感謝款待，感謝此刻的寧靜。」</span></p>
+
+                            <strong>[Step 3: 儀式化的結束]</strong>
+                            <p>用餐完畢，引導員敲響銅鈴，結束靜默。</p>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 2.5 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">14:30 - 16:30 | 活動 2.5: 【本日高潮】留白時間：與你的森林約會</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 提供最高級的款待：「不被打擾的自由」。讓賓客在安全的範圍內，與自己獨處，消化體驗。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「被賦能、自由、放鬆」
+                            <br>→ 「深刻的自我對話」
+                            <br>→ 「獨處的豐盛」。
+                        </td>
+                        <td>
+                            <strong>場景 (全園區)：</strong>
+                            <ul>
+                                <li>確保各個「秘密基地」 (如吊床、溪邊、躺椅) 都乾淨且舒適。</li>
+                                <li>引導員需在「可視但不可聽」的距離，作為安全守護。</li>
+                            </ul>
+                            <strong>物料 (每人一份)：</strong>
+                            <ul>
+                                <li><strong>「探索工具包」(帆布袋裝)：</strong>
+                                    <ul>
+                                        <li>手繪的「心靈地圖」 (標示「發呆亭」、「溪語石」等)。</li>
+                                        <li>一本詩集。</li>
+                                        <li>畫板 &amp; 畫筆。</li>
+                                        <li>保溫瓶 (裝滿溫熱花草茶)。</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 賦予意義 (命名)]</strong>
+                            <p>引導員說明時，命名是關鍵。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「接下來的兩個小時，是我們送給您最奢侈的禮物，它叫做『與你的森林約會』。這不是自由活動，而是一段專屬於您與自己的時光。」
+                            </span>
+
+                            <strong>[Step 2: 探索工具包]</strong>
+                            <p>發放工具包，並說明內容。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「我們為您的約會準備了這個『探索工具包』... 您可以去地圖上的任何角落，畫畫、讀詩、喝茶，或只是單純地睡個午覺。做任何您想做，或什麼都不做的事。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                這個工具包，傳達了「您的獨處是被我們珍視且支持的」的訊息。它給予了「結構內的自由」，讓人感覺不是被「放生」，而是被「賦能」。
+                            </div>
+
+                            <strong>[Step 3: 安全感的承諾]</strong>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「這片森林，今天下午完全屬於你。因為它的範圍是安全的，所以您可以全然地放鬆，不用擔心迷路。我們會在遠處守護，但絕不打擾。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (場域小)</span>
+                                正因為「場域小、可控」，賓客才敢於真正地放下戒備，進入深度的自我對話。這是大型國家公園無法提供的、最奢侈的體驗。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 2.6 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">17:30 - 18:30 | 活動 2.6: 日落聲音療癒</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 在獨處後，提供一個深度的身心整合。透過聲音的振動，釋放潛意識的壓力。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「深度放鬆」
+                            <br>→ 「情緒釋放」
+                            <br>→ 「被洗滌後的平靜」。
+                        </td>
+                        <td>
+                            <strong>場景 (室內或半戶外)：</strong>
+                            <ul>
+                                <li><strong>舒適是前提：</strong> 鋪設足夠的瑜伽墊、抱枕、暖毯。</li>
+                                <li>光線：調暗，以燭光或鹽燈為主。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>頌缽、水晶缽、手碟等樂器。</li>
+                                <li>沾有精油的羽毛 (用於喚醒)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 漸進式引導]</strong>
+                            <p>賓客躺平後，先不敲缽。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「請找到一個最舒適的姿勢... 在聲音開始前，我們先做一個10分鐘的身體掃描，將您的注意力，從頭頂，緩慢地帶到您的腳底...」
+                            </span>
+
+                            <strong>[Step 2: 「雙聲道」的引導]</strong>
+                            <p>當頌缽開始，引導員的聲音要融入背景。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「接下來，您將會聽到兩種聲音。一種，是來自頌缽的、古老的、穩定的頻率，它會穿透您的身體，帶來內在的寧靜。另一種，是來自窗外森林的、充滿生命力的、自然的頻率。請允許這兩種聲音，為您做一次最深層的淨化。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (蟲鳴)</span>
+                                將傍晚的「蟲鳴」從「噪音」，重新詮釋為療癒的「環繞音場」。昇華為獨一無二的、與土地共振的「田野限定版」音療。
+                            </div>
+
+                            <strong>[Step 3: 溫柔喚醒 &amp; 緩衝]</strong>
+                            <p>聲音停止後，留出5分鐘的靜默。然後，音療師走到每人身邊，用精油羽毛在額前輕拂。</p>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 頂級體驗細節</span>
+                                用嗅覺和輕柔的觸覺，將賓客從深層冥想中帶回。這個充滿照顧感的細節，會讓體驗的完整度大大提升。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 2.7 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">19:00 - 21:00 | 活動 2.7: 森林微醺晚餐 &amp; 戶外電影</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 在深層療癒後，提供一個溫暖、放鬆、愉悅的社群時光，為一天畫上完美句點。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「被滋養、滿足、連結」。
+                        </td>
+                        <td>
+                            <strong>場景 (戶外)：</strong>
+                            <ul>
+                                <li>戶外電影螢幕、投影機、音響。</li>
+                                <li>舒適的沙發、懶骨頭、毛毯。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>精心設計的 Mocktail (無酒精雞尾酒)。</li>
+                                <li>晚餐 (可為較輕鬆的餐點)。</li>
+                                <li>電影：自然主題片 (如《我的章魚老師》、《A Life on Our Planet》)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 精緻化的 Mocktail]</strong>
+                            <p>為不喝酒的賓客提供同等級的精緻體驗。每杯 Mocktail 都應有獨特的名字和故事。</p>
+
+                            <strong>[Step 2: 電影「靜音模式」]</strong>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「今晚的電影很特別。我們將會關掉旁白，只播放畫面與配樂。讓我們用今天被打開的感官，去重新『閱讀』這部電影的畫面，用心去感受，而不是用腦去聽解說。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                創造獨特的觀影體驗。它延續了白天的「非語言」模式，讓大家的心保持在安靜而敞開的狀態，同時又能在共享的氛圍中感受視覺的感動。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <!-- ============================== -->
+            <!-- Day 3: 整合 -->
+            <!-- ============================== -->
+            <div id="day3" class="tab-content" role="tabpanel" aria-labelledby="tab-day3" hidden>
+                <h2 class="content-title">Day 3:【整合 Integrate】— 將森林的禮物，編織成前行的力量</h2>
+
+                <!-- 活動 3.1 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">07:00 - 08:30 | 活動 3.1: 日出步行 &amp; 晨間書寫</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 將前兩天的流動感受，錨定成清晰的、可帶走的內在洞見與行動意圖。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「澄澈、寧靜」
+                            <br>→ 到「被啟發」
+                            <br>→ 到「充滿希望」。
+                        </td>
+                        <td>
+                            <strong>場景 (朝東的林間空地)：</strong>
+                            <ul>
+                                <li>確保視野開闊，可看見天光。</li>
+                                <li>鋪設坐墊或瑜伽墊。</li>
+                            </ul>
+                            <strong>物料 (每人一份)：</strong>
+                            <ul>
+                                <li><strong>[品牌] 森林日記冊 (高品質紙張)。</strong></li>
+                                <li>筆。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 重新定義「日出」]</strong>
+                            <p>引導員帶領靜默步行至空地。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「我們不是來『看』日出的，而是來『感覺』日出的。請閉上眼，用你的皮膚去感覺，當第一道光穿透樹葉灑在你臉上時，溫度的變化... 這就是您內在的日出，一份新的開始。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值 &amp; 限制轉化 (場域小/無大景)</span>
+                                將「沒有壯闊日出」的景觀限制，轉化為一個更深刻、更私人的「內在感官體驗」。
+                            </div>
+
+                            <strong>[Step 2: 行動導向的書寫]</strong>
+                            <p>發放日記冊。引導員說明提問，然後保持安靜讓大家書寫。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「這本日記是寫給您自己的，不必分享。請回答...<br>
+                                1. <strong>森林的低語：</strong> 這兩天，哪個畫面或感受最觸動你？<br>
+                                2. <strong>城市的種子：</strong> 你最想把森林的哪一種「品質」(如：緩慢) 帶回生活？<br>
+                                3. <strong>一個新的承諾：</strong> 關於你自己，你決定『開始』或『停止』做什麼？」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                這些提問，將抽象的感動，轉化為「具體的、可執行的微行動」。日記冊成為個人化的「轉化說明書」。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 3.2 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">08:30 - 10:00 | 活動 3.2: 森林早餐 &amp; 分享圈</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 從「個人洞見」轉化為「集體智慧」，在被聽見與聽見他人中，獲得彼此支持的力量。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「溫暖的共鳴」
+                            <br>→ 到「被支持、被賦能」。
+                        </td>
+                        <td>
+                            <strong>場景 (餐廳)：</strong>
+                            <ul>
+                                <li>座位安排成圓形或馬蹄形，利於分享。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>「發言權杖」 (一顆特別的石頭或一根樹枝)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 設定分享規則]</strong>
+                            <p>早餐後，引導員說明分享規則。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「我們將進行一個分享圈。規則很簡單：<br>
+                                1. 請用『一句話』，分享您決定帶回城市的那顆『種子』是什麼？<br>
+                                2. 只有手持『發言權杖』的人可以說話。<br>
+                                3. 當別人在分享時，我們不提問、不給建議，只給予最專注的聆聽。因為最深的療癒，往往發生在被全然聽見的那一刻。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗</span>
+                                「一句話」的形式讓分享更有力，並產生「智慧的漣漪效應」。「聆聽儀式」則創造了一個神聖的空間，讓每個分享者都感覺被尊重。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 3.3 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">10:00 - 11:00 | 活動 3.3: 【本日高潮】森林祝福儀式 &amp; 迴聲的歸還</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 創造情感的頂峰。透過儀式，將所有體驗的伏筆收攏，完成完美的敘事閉環。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「感動、被祝福」
+                            <br>→ 到「完整的、被看見的」
+                            <br>→ 到「充滿力量」。
+                        </td>
+                        <td>
+                            <strong>場景 (一棵特定的「回程之樹」下)：</strong>
+                            <ul>
+                                <li>準備好 Day 1 晚上的「迴聲書信」卡片 (已按人分好)。</li>
+                                <li>麻繩 (剪成小段)。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>Day 1 的「迴聲書信」卡片。</li>
+                                <li>麻繩。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 「迴聲書信」的歸還 (魔法時刻)]</strong>
+                            <p>引導員手持卡片，一對一、鄭重地交還給每位賓客。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「(直視對方眼睛) <strong>這是第一晚，當您最敞開時，森林透過您的手，寫給您的訊息。現在，我們將它交還給您，願它成為您未來路上的光。</strong>」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗 (敘事高潮)</span>
+                                當賓客重新看到這張卡片時，兩天來的體驗會瞬間湧上心頭，賦予那句話全新的、深刻的意義。這是來自「過去的自己」送給「現在的自己」最珍貴的禮物。
+                            </div>
+
+                            <strong>[Step 2: 「回程之樹」的承諾]</strong>
+                            <p>邀請大家撿拾一片落葉，用麻繩繫在樹上。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「請將您所有的感謝與祝福，繫在這片葉子上，掛上這棵『回程之樹』。這棵樹將承載我們共同的記憶。我們承諾會照顧它，並在未來的季節裡，將它的照片寄給你們，提醒你們，那份寧靜與力量，一直都在這裡，也一直在你們心裡。」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗 (延續連結)</span>
+                                這個承諾，將一個「結束」，轉化為一個「持續的連結」。它讓體驗的影響力，得以在時間中延續。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 活動 3.4 -->
+                <table class="sop-table">
+                    <tr>
+                        <th colspan="3">11:00 - 11:30 | 活動 3.4: 告別 &amp; 開啟儀式</th>
+                    </tr>
+                    <tr>
+                        <th class="col-objective">核心目標 &amp; 情緒設計</th>
+                        <th class="col-setup">物料 &amp; 場景準備</th>
+                        <th class="col-script">詳細執行腳本 &amp; 峰值體驗</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>核心目標：</strong> 完成最終的敘事閉環，賦予賓客自主權，並帶著有形的「心錨」溫柔地重返日常。
+                            <br><br>
+                            <strong>情緒設計：</strong>
+                            「圓滿、篤定、被祝福」。
+                        </td>
+                        <td>
+                            <strong>場景 (接待處出口)：</strong>
+                            <ul>
+                                <li>播放清單：[指定溫暖、有力量的送行音樂]。</li>
+                            </ul>
+                            <strong>物料：</strong>
+                            <ul>
+                                <li>Day 1 的「煩惱收藏盒」(已按人分好)。</li>
+                                <li>贈禮：擴香石 (已滴上 Day 1 的「森林香氣」)。</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <strong>[Step 1: 「煩惱收藏盒」的開啟 (最終閉環)]</strong>
+                            <p>引導員發還 Day 1 的木盒。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「在您離開前，這個『心事管家』將物歸原主。您可以現在打開它，也可以選擇不打開。也許... 當您再次看見裡面的那個煩惱時，會對它有一個全新的、更溫柔的視角。<strong>這個盒子裡的煩惱從未改變，但您，已經不一樣了。</strong>」
+                            </span>
+                            <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗 (見證轉化)</span>
+                                這段引導詞是畫龍點睛之筆。它不做任何判斷，而是將最終的詮釋權與力量交還給賓客。這個儀式，讓他們的「內在轉化」，變得親眼可見。
+                            </div>
+
+                            <strong>[Step 2: 贈禮 &amp; 告別]</strong>
+                            <p>引導員團隊一一與賓客擁抱告別，並送上擴香石。</p>
+                            <span class="script-text">
+                                <strong>引導詞：</strong>「謝謝您來到這裡。請把森林的氣息帶回去吧。」
+                            </span>
+                             <div class="peak-box">
+                                <span class="peak-title">▲ 峰值體驗 (嗅覺心錨)</span>
+                                嗅覺是記憶最強的錨點。這個小小的禮物，讓他們可以隨時透過深呼吸，一秒鐘回到這片森林的寧靜之中，讓療癒得以在日常生活中隨時被提取。
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <!-- ============================== -->
+            <!-- 核心總覽 (Summary) -->
+            <!-- ============================== -->
+            <div id="summary" class="tab-content" role="tabpanel" aria-labelledby="tab-summary" hidden>
+                <h2 class="content-title">核心總覽：敘事弧線 &amp; 限制轉化</h2>
+
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">敘事弧線 (Narrative Arc)</h3>
+                <p class="mb-4">整趟旅程是一部精心編排的「內在英雄之旅」，引導參與者從放下、接收，到最後帶著力量回歸。</p>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="grid-card">
+                        <h4 class="font-bold text-lg text-emerald-700">Day 1:【解構 Release】</h4>
+                        <p class="text-sm"><strong>目標：溫柔地瓦解日常的盔甲。</strong><br>創造絕對安全的結界，讓參與者從「城市頻率」校準到「森林頻率」。</p>
+                    </div>
+                    <div class="grid-card">
+                        <h4 class="font-bold text-lg text-emerald-700">Day 2:【沉浸 Receive】</h4>
+                        <p class="text-sm"><strong>目標：讓森林的智慧流淌進來。</strong><br>最大化打開所有感官，從被動的「體驗者」轉變為「感受者」與「創造者」。</p>
+                    </div>
+                    <div class="grid-card">
+                        <h4 class="font-bold text-lg text-emerald-700">Day 3:【整合 Integrate】</h4>
+                        <p class="text-sm"><strong>目標：將森林的禮物編織成力量。</strong><br>將無形的體驗，轉化成可帶走的「內在工具」與「行動意圖」。</p>
+                    </div>
+                </div>
+
+                <h3 class="content-title mt-8">場域限制轉化策略 (品牌致勝點)</h3>
+                <p class="mb-4">我們的核心策略是將每一個「限制」都重新定義，並設計成獨一無二的「峰值體驗」。</p>
+                <div class="overflow-x-auto bg-white/80 rounded-2xl shadow-lg border border-slate-200/70">
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th class="w-1/4">限制 (劣勢)</th>
+                                <th class="w-1/2">轉化策略 (The How)</th>
+                                <th class="w-1/4">峰值體驗 (The Peak)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-medium">蚊蟲 &amp; 濕氣</td>
+                                <td><span class="how-text">【款待的儀式】</span><br>在迎賓時提供「森林香水」（天然防蚊液），將惱人問題轉化為寵愛的接觸點。將濕氣定義為「晨霧吐納」的天然加濕器。</td>
+                                <td class="font-medium">被照顧的儀式感</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">場域小</td>
+                                <td><span class="how-text">【從廣度到深度】</span><br>放棄「景點」思維，設計「一公尺的探險」、「微觀洞察」。開場即強調「小，才能看得深」。</td>
+                                <td class="font-medium">「侘寂」美學的體悟</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">場域小 (續)</td>
+                                <td><span class="how-text">【絕對安全的探索】</span><br>利用場域可控性，設計「與森林的約會」獨處時間。提供「探索工具包」，創造奢侈的「留白」體驗。</td>
+                                <td class="font-medium">奢侈的獨處時光</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">海拔低 (生態)</td>
+                                <td><span class="how-text">【在地素材的轉譯】</span><br>將低海拔植物（野薑花、月桃）編入香氛故事。將夜晚蟲鳴定義為「自然交響樂」，與頌缽結合。</td>
+                                <td class="font-medium">獨一無二的音療</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabPanels = document.querySelectorAll('.tab-content');
+        const tabList = document.querySelector('[role="tablist"]');
+
+        function showTab(tabName) {
+            tabPanels.forEach(panel => {
+                const isActive = panel.id === tabName;
+                panel.classList.toggle('active', isActive);
+                if (isActive) {
+                    panel.removeAttribute('hidden');
+                    panel.setAttribute('tabindex', '0');
+                } else {
+                    panel.setAttribute('hidden', 'hidden');
+                    panel.removeAttribute('tabindex');
+                }
+            });
+
+            tabs.forEach(tab => {
+                const isActive = tab.dataset.tab === tabName;
+                tab.classList.toggle('active', isActive);
+                tab.setAttribute('aria-selected', isActive);
+                tab.setAttribute('tabindex', isActive ? '0' : '-1');
+            });
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => showTab(tab.dataset.tab));
+        });
+
+        if (tabList) {
+            tabList.addEventListener('keydown', event => {
+                if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+                const currentIndex = Array.from(tabs).findIndex(tab => tab.classList.contains('active'));
+                if (currentIndex === -1) return;
+                const offset = event.key === 'ArrowRight' ? 1 : -1;
+                let nextIndex = (currentIndex + offset + tabs.length) % tabs.length;
+                tabs[nextIndex].focus();
+                showTab(tabs[nextIndex].dataset.tab);
+            });
+        }
+
+        showTab('day1');
+    </script>
+
+</body>
+</html>
